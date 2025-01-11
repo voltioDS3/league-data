@@ -1,35 +1,47 @@
 import requests
+import time
 class LeagueV4:
-    def __init__(self, api_key, base_url):
+    
+    def __init__(self, api_key, base_url, max_retries):
         self.api_key = api_key
         self.base_url = base_url
-    
-    def request_handler(self, url, header,params = None ,):
-        try:
-            response = requests.get(url, params=params, headers=header )
-            response.raise_for_status() 
+        self.max_retries = max_retries
         
-            if response.status_code == 429:
-                return -1
-            else:
-                return response.json()
+    def request_handler(self, url, header,params = None):
+        tries = 0
+        
+        while tries < self.max_retries:
+            try:
+                response = requests.get(url, params=params, headers=header )
+                response.raise_for_status() 
+                tries += 1
+                if response.status_code == 429:
+                    time.sleep(90)
+                    continue
+                else:
+                    return response.json()
+                
+            except requests.exceptions.HTTPError as http_err:
+                print(f"HTTP error occurred: {http_err}")
+                continue
+                return None
             
-        except requests.exceptions.HTTPError as http_err:
-            print(f"HTTP error occurred: {http_err}")
-
-            return None
+            except requests.exceptions.ConnectionError:
+                print("Error connecting to the API.")
+                continue
+                return None
+            
+            except requests.exceptions.Timeout:
+                print("The request timed out.")
+                continue
+                return None
+            
+            except requests.exceptions.RequestException as err:
+                print(f"An error occurred: {err}")
+                continue
+                return None
         
-        except requests.exceptions.ConnectionError:
-            print("Error connecting to the API.")
-            return None
-        
-        except requests.exceptions.Timeout:
-            print("The request timed out.")
-            return None
-        
-        except requests.exceptions.RequestException as err:
-            print(f"An error occurred: {err}")
-            return None
+        return None
         
     """
     dont know what it returns but ok, queue could be 
