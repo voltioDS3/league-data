@@ -68,7 +68,7 @@ class LeagueV4:
         - page(int): default to 1, just which page of data you see, page 1 has the best, page 2 the seconds best and so forth
     """
     def all_entries(self, queue, tier, division, REGION, page = 1):
-        request_url = f"https://{REGION}.api.riotgames.com/{self.base_url}entries/{queue}/{tier}/{division}"
+        request_url = f"https://{REGION.lower()}.api.riotgames.com/{self.base_url}entries/{queue}/{tier}/{division}"
         header = {
           "X-Riot-Token": self.api_key
         }
@@ -84,7 +84,7 @@ class LeagueV4:
         - REGION(string): is different to region, this could ne NA1, LA1 LA2 etc
     """
     def grandmaster_leagues_by_queue(self, queue, REGION):
-        request_url = f"https://{REGION}.api.riotgames.com/{self.base_url}grandmasterleagues/by-queue/{queue}"
+        request_url = f"https://{REGION.lower()}.api.riotgames.com/{self.base_url}grandmasterleagues/by-queue/{queue}"
         header = {
 
             "X-Riot-Token": self.api_key
@@ -98,7 +98,7 @@ class LeagueV4:
         - REGION(string): is different to region, this could ne NA1, LA1 LA2 etc
     """
     def league_by_leagueId(self, leagueId, REGION):
-        request_url = f"https://{REGION}.api.riotgames.com/{self.base_url}leagues/{leagueId}"
+        request_url = f"https://{REGION.lower()}.api.riotgames.com/{self.base_url}leagues/{leagueId}"
         header = {
 
             "X-Riot-Token": self.api_key
@@ -112,7 +112,7 @@ class LeagueV4:
         - REGION(string): is different to region, this could ne NA1, LA1 LA2 etc
     """
     def master_leagues_by_queue(self, queue, REGION):
-        request_url = f"https://{REGION}.api.riotgames.com/{self.base_url}masterleagues/by-queue/{queue}"
+        request_url = f"https://{REGION.lower()}.api.riotgames.com/{self.base_url}masterleagues/by-queue/{queue}"
         header = {
 
             "X-Riot-Token": self.api_key
