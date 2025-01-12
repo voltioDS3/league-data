@@ -6,7 +6,7 @@ class LeagueV4:
         self.api_key = api_key
         self.base_url = base_url
         self.max_retries = max_retries
-        
+        self.debug = False
     def request_handler(self, url, header,params = None):
         tries = 0
         
@@ -15,9 +15,18 @@ class LeagueV4:
                 response = requests.get(url, params=params, headers=header )
                 response.raise_for_status() 
                 tries += 1
+                if self.debug:
+                    print(f"[I] {response.status_code}")
+                    
                 if response.status_code == 429:
+                    if self.debug:
+                        print("[E]too many requests")
                     time.sleep(90)
                     continue
+                if response.json == []:
+                    if self.debug:
+                        print("[I] response is empty")
+                    return None
                 else:
                     return response.json()
                 
@@ -40,7 +49,8 @@ class LeagueV4:
                 print(f"An error occurred: {err}")
                 continue
                 return None
-        
+        if self.debug:
+            print("[W] exceded number of retries")
         return None
         
     """
